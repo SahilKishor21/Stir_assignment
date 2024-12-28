@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Trending Topics</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container Styling */
+        .container {
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Heading Styling */
+        h1 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        /* Button Styling */
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        /* Results Section Styling */
+        #results {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            text-align: left;
+        }
+    </style>
+    <script>
+        async function runScript() {
+            try {
+                // Call the backend API
+                const response = await fetch('/run_script');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch the trends');
+                }
+                const data = await response.json();
+
+                // Display results
+                document.getElementById('results').innerHTML = `
+                    <p>These are the most happening topics as on ${new Date(data.date_time).toLocaleString()}</p>
+                    <ul>
+                        <li>${data.trend1}</li>
+                        <li>${data.trend2}</li>
+                        <li>${data.trend3}</li>
+                        <li>${data.trend4}</li>
+                        <li>${data.trend5}</li>
+                    </ul>
+                    <p>The IP address used for this query was ${data.ip_address}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Twitter Trending Topics</h1>
+        <button onclick="runScript()">Click here to run the script</button>
+        <div id="results"></div>
+    </div>
+</body>
+</html>
